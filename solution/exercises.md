@@ -60,13 +60,13 @@ nhiều token hơn tiếng Anh cùng độ dài?**
 ### Câu 3.1 — Trải nghiệm người dùng với streaming
 **Streaming quan trọng nhất trong trường hợp nào, và khi nào thì
 non-streaming lại phù hợp hơn?** (1 đoạn văn)
-> *Câu trả lời của bạn*
+> Streaming hữu ích nhất trong chatbot tương tác hoặc khi câu trả lời dài, vì người dùng có thể đọc phần đầu ngay thay vì chờ toàn bộ phản hồi hoàn tất. Nó giúp giảm cảm giác chờ đợi, dù không nhất thiết giảm tổng thời gian xử lý. Non-streaming phù hợp hơn với tác vụ chạy nền hoặc khi ứng dụng cần nhận đủ kết quả để kiểm tra, phân tích JSON hay xử lý tiếp trước khi hiển thị.
 
 ### Câu 3.2 — Vì sao backoff theo cấp số nhân?
 **So với delay cố định (ví dụ luôn chờ 1 giây), exponential backoff có lợi
 thế gì khi API bị quá tải? Điều gì xảy ra nếu hàng nghìn client cùng retry
 với delay cố định giống nhau?**
-> *Câu trả lời của bạn*
+> Exponential backoff tăng dần thời gian chờ sau mỗi lần thất bại, giúp giảm tần suất request và cho server thêm thời gian phục hồi khi quá tải. Nếu hàng nghìn client cùng retry theo khoảng chờ cố định và cùng thời điểm, chúng có thể tạo những đợt request dồn dập, khiến tình trạng quá tải kéo dài. Backoff theo cấp số nhân vẫn có thể bị đồng bộ giữa các client, nên thực tế thường thêm jitter — một khoảng ngẫu nhiên — để phân tán thời điểm retry.
 
 ---
 
@@ -76,13 +76,13 @@ với delay cố định giống nhau?**
 **Bạn chọn persona gì cho trợ lý của mình? Viết lại system prompt đó và giải
 thích 1–2 lựa chọn từ ngữ quan trọng trong prompt (ví dụ: vì sao yêu cầu
 "trả lời ngắn gọn", vì sao chỉ định ngôn ngữ...):**
-> *Câu trả lời của bạn*
+> Tôi chọn persona trợ giảng AI với system prompt: “Bạn là trợ giảng thân thiện của khóa AI, trả lời ngắn gọn bằng tiếng Việt.” Cụm “trợ giảng thân thiện” định hướng cách giải thích dễ tiếp cận cho người đang học. Yêu cầu “ngắn gọn bằng tiếng Việt” giúp câu trả lời tập trung vào ý chính và phù hợp với ngôn ngữ học tập của tôi.
 
 ### Câu 4.2 — Hạn chế & cải thiện
 **Trợ lý của bạn hiện có hạn chế lớn nhất là gì (ví dụ: history chỉ 3 lượt,
 không có bộ nhớ dài hạn, không kiểm duyệt nội dung...)? Đề xuất một cải
 thiện cụ thể và mô tả ngắn cách triển khai:**
-> *Câu trả lời của bạn*
+> Hạn chế lớn nhất là trợ lý chỉ giữ ba lượt hội thoại gần nhất, nên có thể mất thông tin quan trọng người dùng cung cấp từ đầu phiên. Tôi đề xuất tóm tắt những lượt sắp bị loại bỏ và lưu vào một biến riêng. Mỗi request sẽ gửi kèm bản tóm tắt cùng ba lượt gần nhất; giới hạn độ dài bản tóm tắt giúp kiểm soát token, nhưng cần lưu ý việc tóm tắt có thể làm mất hoặc sai lệch thông tin.
 
 ---
 
